@@ -13,14 +13,14 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="kicker">Pain event → sky watch</div>
+      <div class="kicker">Shared book · Chester, SC</div>
       <h1>Tina’s Back</h1>
       <p class="lede">When the pain crosses a threshold, rain has followed within 72 hours — with stunning precision. This log is how we prove it, event by event.</p>
       <p class="lede" style="margin-top:12px;color:var(--gold)">First signal: Wed, Aug 26, 2026 at <strong>10:31 AM</strong> · pain 4 · “I know rain is coming.” Window closes Sat 10:31 AM.</p>
     </header>
     <section class="card">
       <h2>Log an event</h2>
-      <p class="hint">Log every number she gives — 1 through 10. The small ones stay for refinement. A 4 is the “I know rain is coming” line and starts the 72-hour sky watch over Chester, SC. Don’t re-record this morning’s 10:31 texts — that entry is already Event 1.</p>
+      <p class="hint">Log here or in the Tina’s Back chat. Chat entries go on the shared book both phones can see. A 4 is the I-know line. Do not re-record this morning’s 10:31 texts.</p>
       <form id="event-form">
         <div class="row">
           <div>
@@ -38,12 +38,13 @@
         <div class="actions">
           <button class="primary" type="submit">Record event</button>
           <button class="ghost" type="button" id="use-now">Use right now</button>
+          <button class="ghost" type="button" id="reload-book">Refresh book</button>
         </div>
       </form>
     </section>
     <section class="card">
       <h2>The ledger</h2>
-      <p class="hint">Every pain input is kept. Events at 4+ carry the rain claim. Rain = any measurable precipitation in the following 72 hours.</p>
+      <p class="hint">Shared events show on every phone. Phone-only events stay on this device until they are sent in chat.</p>
       <div id="ledger"></div>
     </section>
     <footer class="story">
