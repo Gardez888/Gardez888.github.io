@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Record · Tina’s Back</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="kicker">Recording desk · Chester, SC</div>
+      <h1>Tina’s Back</h1>
+      <p class="lede">Log every number 1 through 10. A 4 is the I-know line and starts the 72-hour sky watch. Send the same line in the Tina’s Back chat so it lands on the public book.</p>
+    </header>
+    <section class="card">
+      <h2>Log an event</h2>
+      <p class="hint">Do not re-record Event 1 (Wed 10:31 AM, pain 4). That one is already on the shared book.</p>
+      <form id="event-form">
+        <div class="row">
+          <div>
+            <label for="when">Date & time</label>
+            <input id="when" type="datetime-local" required />
+          </div>
+          <div>
+            <label>Pain level</label>
+            <div class="pain-scale" id="pain-scale"></div>
+            <input type="hidden" id="pain" required />
+          </div>
+        </div>
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="What it feels like, side, fatigue, anything Tina said…"></textarea>
+        <div class="actions">
+          <button class="primary" type="submit">Record event</button>
+          <button class="ghost" type="button" id="use-now">Use right now</button>
+        </div>
+      </form>
+    </section>
+    <section class="card">
+      <h2>The ledger</h2>
+      <p class="hint">Shared book plus anything saved on this phone.</p>
+      <div class="actions" style="margin-top:0;margin-bottom:12px">
+        <button class="ghost" type="button" id="reload-book">Refresh book</button>
+      </div>
+      <div id="ledger"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="record.js"></script>
+</body>
+</html>
