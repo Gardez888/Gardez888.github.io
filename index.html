@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tina’s Back</title>
+  <meta name="description" content="Track Tina’s back-pain events and whether rain follows within 72 hours." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="kicker">Pain event → sky watch</div>
+      <h1>Tina’s Back</h1>
+      <p class="lede">When the pain crosses a threshold, rain has followed within 72 hours — with stunning precision. This log is how we prove it, event by event.</p>
+    </header>
+    <section class="card">
+      <h2>Log an event</h2>
+      <p class="hint">Log every number she gives — 1 through 10. The small ones stay for refinement. A 4 is the “I know rain is coming” line and starts the 72-hour sky watch over Chester, SC (Orrs Station).</p>
+      <form id="event-form">
+        <div class="row">
+          <div>
+            <label for="when">Date & time</label>
+            <input id="when" type="datetime-local" required />
+          </div>
+          <div>
+            <label>Pain level</label>
+            <div class="pain-scale" id="pain-scale"></div>
+            <input type="hidden" id="pain" required />
+          </div>
+        </div>
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="What it feels like, side, fatigue, anything Tina said…"></textarea>
+        <div class="actions">
+          <button class="primary" type="submit">Record event</button>
+          <button class="ghost" type="button" id="use-now">Use right now</button>
+        </div>
+      </form>
+    </section>
+    <section class="card">
+      <h2>The ledger</h2>
+      <p class="hint">Every pain input is kept. Events at 4+ carry the rain claim. Rain = any measurable precipitation in the following 72 hours.</p>
+      <div id="ledger"></div>
+    </section>
+    <footer class="story">
+      <p>Tina hurt her back at 20 lifting a box. She couldn’t straighten up for a month. One day opening an office door, her right side went paralyzed and the right lower back lit up. High pain lasted more than ten years. Now it comes and goes every couple of months. Arthritis. Discs <strong>L4, L5, S1</strong>. Years of epidurals, joint blocks, shots.</p>
+      <p style="margin-top:10px">When her back talks, we watch the sky.</p>
+    </footer>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
