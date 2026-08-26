@@ -20,7 +20,7 @@ function loadEvents() {
   let events = [];
   try { events = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
   catch { events = []; }
-  if (!events.some(e => e.id === EVENT_ONE.id)) {
+  if (!events.some(function(e) { return e.id === EVENT_ONE.id; })) {
     events.push(Object.assign({}, EVENT_ONE));
     saveEvents(events);
   }
@@ -36,6 +36,9 @@ function toLocalInputValue(d) {
 function fmtWhen(iso) {
   const d = new Date(iso);
   return d.toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+function inch(mm) {
+  return (Number(mm) / 25.4).toFixed(2);
 }
 const scale = $("pain-scale");
 for (let i = 1; i <= 10; i++) {
@@ -62,31 +65,48 @@ async function fetchPrecipWindow(startIso) {
   const data = await res.json();
   const times = (data.hourly && data.hourly.time) || [];
   const precip = (data.hourly && data.hourly.precipitation) || [];
-  let sum = 0; let firstRain = null;
-  const startMs = start.getTime(); const endMs = end.getTime();
+  let mmTotal = 0, mmPast = 0, firstRain = null, firstPast = null;
+  const now = Date.now();
+  const startMs = start.getTime();
+  const endMs = end.getTime();
   times.forEach(function(t, i) {
     const ms = new Date(t).getTime();
     if (ms >= startMs && ms <= endMs) {
       const mm = Number(precip[i] || 0);
-      sum += mm;
+      mmTotal += mm;
+      if (ms <= now) {
+        mmPast += mm;
+        if (mm > 0.1 && !firstPast) firstPast = t;
+      }
       if (mm > 0.1 && !firstRain) firstRain = t;
     }
   });
-  return { mm: Math.round(sum * 10) / 10, firstRain: firstRain, windowClosed: Date.now() >= endMs, rained: sum > 0.2 };
+  return {
+    mm: Math.round(mmTotal * 10) / 10,
+    mmPast: Math.round(mmPast * 10) / 10,
+    firstRain: firstRain,
+    firstPast: firstPast,
+    windowClosed: now >= endMs,
+    rained: mmPast > 0.2
+  };
 }
 function weatherBadge(ev) {
-  if (!ev.weather) return '<span class="badge wait">checking sky…</span>';
-  if (ev.weather.error) return '<span class="badge err">weather check failed</span>';
-  if (ev.weather.rained) {
-    const when = ev.weather.firstRain ? (" first rain " + fmtWhen(ev.weather.firstRain)) : "";
-    return '<span class="badge yes">rained · ' + ev.weather.mm + ' mm</span><div class="meta">' + when + '</div>';
+  const w = ev.weather;
+  if (!w) return '<span class="badge wait">checking sky…</span>';
+  if (w.error) return '<span class="badge err">weather check failed</span>';
+  if (w.rained) {
+    const when = w.firstPast ? (" first rain " + fmtWhen(w.firstPast)) : "";
+    return '<span class="badge yes">rained · ' + w.mmPast + ' mm (' + inch(w.mmPast) + ' in)</span><div class="meta">' + when + '</div>';
   }
-  if (ev.weather.windowClosed) return '<span class="badge no">no rain in 72 hours</span>';
-  return '<span class="badge wait">watching · ' + (ev.weather.mm || 0) + ' mm so far</span>';
+  if (w.windowClosed) return '<span class="badge no">no rain in 72 hours</span>';
+  if (w.mm > 0.2 && w.firstRain) {
+    return '<span class="badge wait">watching · models show ' + w.mm + ' mm (' + inch(w.mm) + ' in)</span><div class="meta">forecast first rain ' + fmtWhen(w.firstRain) + ' · not on the ground yet</div>';
+  }
+  return '<span class="badge wait">watching · 0 mm on the ground so far</span>';
 }
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, function(c) {
-    return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    return ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" })[c];
   });
 }
 function render() {
