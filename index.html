@@ -19,32 +19,11 @@
       <p class="lede" style="margin-top:12px;color:var(--gold)">First signal: Wed, Aug 26, 2026 at <strong>10:31 AM</strong> · pain 4 · “I know rain is coming.” Window closes Sat 10:31 AM.</p>
     </header>
     <section class="card">
-      <h2>Log an event</h2>
-      <p class="hint">Log here or in the Tina’s Back chat. Chat entries go on the shared book both phones can see. A 4 is the I-know line. Do not re-record this morning’s 10:31 texts.</p>
-      <form id="event-form">
-        <div class="row">
-          <div>
-            <label for="when">Date & time</label>
-            <input id="when" type="datetime-local" required />
-          </div>
-          <div>
-            <label>Pain level</label>
-            <div class="pain-scale" id="pain-scale"></div>
-            <input type="hidden" id="pain" required />
-          </div>
-        </div>
-        <label for="notes">Notes</label>
-        <textarea id="notes" placeholder="What it feels like, side, fatigue, anything Tina said…"></textarea>
-        <div class="actions">
-          <button class="primary" type="submit">Record event</button>
-          <button class="ghost" type="button" id="use-now">Use right now</button>
-          <button class="ghost" type="button" id="reload-book">Refresh book</button>
-        </div>
-      </form>
-    </section>
-    <section class="card">
       <h2>The ledger</h2>
-      <p class="hint">Shared events show on every phone. Phone-only events stay on this device until they are sent in chat.</p>
+      <p class="hint">View only. New events are recorded in the Tina’s Back chat, then show here. Rain = measurable precipitation within 72 hours of a 4+ signal.</p>
+      <div class="actions" style="margin-top:0;margin-bottom:12px">
+        <button class="ghost" type="button" id="reload-book">Refresh book</button>
+      </div>
       <div id="ledger"></div>
     </section>
     <footer class="story">
