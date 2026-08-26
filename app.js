@@ -9,12 +9,18 @@ function toast(msg) {
   setTimeout(function() { el.classList.remove("show"); }, 2200);
 }
 function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """)
-    .replace(/'/g, "&#39;");
+  var out = "";
+  s = String(s);
+  for (var i = 0; i < s.length; i++) {
+    var c = s.charAt(i);
+    if (c === "&") out += "&#38;";
+    else if (c === "<") out += "&#60;";
+    else if (c === ">") out += "&#62;";
+    else if (c === "\x22") out += "&#34;";
+    else if (c === "'") out += "&#39;";
+    else out += c;
+  }
+  return out;
 }
 const EVENT_ONE = {
   id: "event-1-2026-08-26",
@@ -69,7 +75,7 @@ for (var n = 1; n <= 10; n++) {
     var b = document.createElement("button");
     b.type = "button";
     b.textContent = String(num);
-    if (num === 4) { b.classList.add("baseline"); b.title = "Baseline"; }
+    if (num === 4) b.classList.add("baseline");
     b.addEventListener("click", function() {
       $("pain").value = String(num);
       var kids = scale.children;
@@ -175,7 +181,7 @@ $("event-form").addEventListener("submit", async function(e) {
   var pain = $("pain").value;
   if (!pain) { toast("Pick a pain level 1-10"); return; }
   var ev = {
-    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+    id: String(Date.now()),
     when: new Date($("when").value).toISOString(),
     pain: Number(pain),
     notes: $("notes").value.trim(),
