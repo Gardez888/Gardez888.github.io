@@ -117,7 +117,7 @@ function render() {
     const tag = Number(ev.pain) >= 4 ? '<div class="signal">I know</div>' : '<div class="signal" style="color:var(--muted)">logged</div>';
     const notes = ev.notes ? ('<div class="notes">' + escapeHtml(ev.notes) + '</div>') : '';
     const closes = fmtWhen(new Date(new Date(ev.when).getTime() + 72*3600*1000).toISOString());
-    return '<article class="event"><div class="event-top"><div><div class="when">' + fmtWhen(ev.when) + '</div><div class="meta">Chester, SC · Orrs Station · window closes ' + closes + '</div></div><div class="score">' + ev.pain + '<span style="font-size:14px;color:var(--muted)">/10</span>' + tag + '</div></div>' + notes + '<div class="weather">' + weatherBadge(ev) + '</div></article>';
+    return '<article class="event"><div class="event-top"><div><div class="when">' + fmtWhen(ev.when) + '</div><div class="meta">Chester, SC · window closes ' + closes + '</div></div><div class="score">' + ev.pain + '<span style="font-size:14px;color:var(--muted)">/10</span>' + tag + '</div></div>' + notes + '<div class="weather">' + weatherBadge(ev) + '</div></article>';
   }).join('');
 }
 async function refreshWeather() {
