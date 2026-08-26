@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Tina’s Back</title>
-  <meta name="description" content="Track Tina’s back-pain events and whether rain follows within 72 hours." />
+  <meta http-equiv="Cache-Control" content="no-cache" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <div class="wrap">
@@ -21,10 +21,19 @@
     <section class="card">
       <h2>The ledger</h2>
       <p class="hint">View only. New events are recorded in the Tina’s Back chat, then show here. Rain = measurable precipitation within 72 hours of a 4+ signal.</p>
-      <div class="actions" style="margin-top:0;margin-bottom:12px">
-        <button class="ghost" type="button" id="reload-book">Refresh book</button>
+      <div id="ledger">
+        <article class="event">
+          <div class="event-top">
+            <div>
+              <div class="when">Event 1 - Tina texts - 10:31 AM</div>
+              <div class="meta">Chester, SC - shared book - closes Sat 10:31 AM</div>
+            </div>
+            <div class="score">4<span style="font-size:14px;color:var(--muted)">/10</span><div class="signal">I know</div></div>
+          </div>
+          <div class="notes">I know rain is coming. Back hurts and tired.</div>
+          <div class="weather"><span class="badge wait">watching - models show rain Friday evening</span><div class="meta">not on the ground yet · window closes Sat 10:31 AM</div></div>
+        </article>
       </div>
-      <div id="ledger"></div>
     </section>
     <footer class="story">
       <p>Tina hurt her back at 20 lifting a box. She couldn’t straighten up for a month. One day opening an office door, her right side went paralyzed and the right lower back lit up. High pain lasted more than ten years. Now it comes and goes every couple of months. Arthritis. Discs <strong>L4, L5, S1</strong>. Years of epidurals, joint blocks, shots.</p>
@@ -32,6 +41,6 @@
     </footer>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="app.js"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
