@@ -1,12 +1,13 @@
 const LAT = 34.717;
 const LON = -81.123;
-const STORAGE_KEY = "tinas-back-events-v1";
+const STORAGE_KEY = "tinas-back-events-v2";
+const SHARED_URL = "events.json";
 function $(id) { return document.getElementById(id); }
 function toast(msg) {
   var el = $("toast");
   el.textContent = msg;
   el.classList.add("show");
-  setTimeout(function() { el.classList.remove("show"); }, 2200);
+  setTimeout(function() { el.classList.remove("show"); }, 2400);
 }
 function escapeHtml(s) {
   var out = "";
@@ -27,36 +28,51 @@ const EVENT_ONE = {
   when: "2026-08-26T10:31:00-04:00",
   pain: 4,
   notes: "I know rain is coming. Back hurts and tired.",
+  source: "shared",
   createdAt: "2026-08-26T11:33:00-04:00",
   weather: null
 };
-function loadEvents() {
-  var events = [];
-  try { events = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-  catch (e) { events = []; }
-  var found = null;
-  for (var i = 0; i < events.length; i++) {
-    if (events[i].id === EVENT_ONE.id) found = events[i];
-  }
-  if (!found) {
-    events.push({
-      id: EVENT_ONE.id,
-      when: EVENT_ONE.when,
-      pain: EVENT_ONE.pain,
-      notes: EVENT_ONE.notes,
-      createdAt: EVENT_ONE.createdAt,
-      weather: null
-    });
-  } else {
-    found.when = EVENT_ONE.when;
-    found.pain = EVENT_ONE.pain;
-    found.notes = EVENT_ONE.notes;
-  }
-  saveEvents(events);
-  return events;
+function readLocal() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+  catch (e) { return []; }
 }
-function saveEvents(events) {
+function saveLocal(events) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+}
+function mergeEvents(shared, local) {
+  var map = {};
+  var list = [];
+  function add(ev, sharedFlag) {
+    if (!ev || !ev.id) return;
+    if (!map[ev.id]) {
+      ev.shared = sharedFlag || ev.source === "shared" || ev.source === "tina-texts" || ev.source === "chat";
+      map[ev.id] = ev;
+      list.push(ev);
+    } else if (sharedFlag) {
+      map[ev.id].when = ev.when;
+      map[ev.id].pain = ev.pain;
+      map[ev.id].notes = ev.notes;
+      map[ev.id].shared = true;
+    }
+  }
+  add(EVENT_ONE, true);
+  for (var i = 0; i < (shared || []).length; i++) add(shared[i], true);
+  for (var j = 0; j < (local || []).length; j++) add(local[j], false);
+  return list;
+}
+var cache = mergeEvents([], readLocal());
+function loadEvents() { return cache.slice(); }
+function saveEvents(events) {
+  cache = events;
+  saveLocal(events);
+}
+async function pullShared() {
+  var res = await fetch(SHARED_URL + "?t=" + Date.now());
+  if (!res.ok) throw new Error("shared book unavailable");
+  var data = await res.json();
+  cache = mergeEvents(data.events || [], readLocal());
+  saveLocal(cache);
+  return cache;
 }
 function pad(n) { return String(n).padStart(2, "0"); }
 function toLocalInputValue(d) {
@@ -88,6 +104,19 @@ $("use-now").addEventListener("click", function() {
   $("when").value = toLocalInputValue(new Date());
 });
 $("when").value = toLocalInputValue(new Date());
+var reloadBtn = $("reload-book");
+if (reloadBtn) {
+  reloadBtn.addEventListener("click", async function() {
+    try {
+      await pullShared();
+      toast("Shared book updated.");
+      render();
+      refreshWeather();
+    } catch (e) {
+      toast("Could not refresh the shared book.");
+    }
+  });
+}
 async function fetchPrecipWindow(startIso) {
   var start = new Date(startIso);
   var end = new Date(start.getTime() + 72 * 3600 * 1000);
@@ -154,7 +183,8 @@ function render() {
     var notes = ev.notes ? ('<div class="notes">' + escapeHtml(ev.notes) + '</div>') : '';
     var closes = fmtWhen(new Date(new Date(ev.when).getTime() + 72*3600*1000).toISOString());
     var title = isOne ? 'Event 1 - Tina texts - 10:31 AM' : fmtWhen(ev.when);
-    var meta = isOne ? 'Chester, SC - clock started 10:31 AM - closes Sat 10:31 AM' : ('Chester, SC - window closes ' + closes);
+    var where = ev.shared ? 'shared book' : 'this phone only';
+    var meta = isOne ? 'Chester, SC - ' + where + ' - closes Sat 10:31 AM' : ('Chester, SC - ' + where + ' - window closes ' + closes);
     html += '<article class="event"><div class="event-top"><div><div class="when">' + title + '</div><div class="meta">' + meta + '</div></div><div class="score">' + ev.pain + '<span style="font-size:14px;color:var(--muted)">/10</span>' + tag + '</div></div>' + notes + '<div class="weather">' + weatherBadge(ev) + '</div></article>';
   }
   box.innerHTML = html;
@@ -181,28 +211,29 @@ $("event-form").addEventListener("submit", async function(e) {
   var pain = $("pain").value;
   if (!pain) { toast("Pick a pain level 1-10"); return; }
   var ev = {
-    id: String(Date.now()),
+    id: "phone-" + Date.now(),
     when: new Date($("when").value).toISOString(),
     pain: Number(pain),
     notes: $("notes").value.trim(),
+    source: "phone",
+    shared: false,
     createdAt: new Date().toISOString(),
     weather: null
   };
-  var events = loadEvents();
-  events.push(ev);
-  saveEvents(events);
+  cache.push(ev);
+  saveLocal(cache);
   $("notes").value = "";
-  toast("Event recorded. Watching the sky.");
+  toast("Saved on this phone. Send it in chat to put it on the shared book.");
   render();
   try {
     ev.weather = await fetchPrecipWindow(ev.when);
-    saveEvents(events);
+    saveLocal(cache);
     render();
   } catch (err) {
     ev.weather = { error: true };
-    saveEvents(events);
+    saveLocal(cache);
     render();
   }
 });
 render();
-refreshWeather();
+pullShared().then(function() { render(); refreshWeather(); }).catch(function() { refreshWeather(); });
