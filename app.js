@@ -20,8 +20,14 @@ function loadEvents() {
   let events = [];
   try { events = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
   catch { events = []; }
-  if (!events.some(function(e) { return e.id === EVENT_ONE.id; })) {
+  const found = events.find(function(e) { return e.id === EVENT_ONE.id; });
+  if (!found) {
     events.push(Object.assign({}, EVENT_ONE));
+    saveEvents(events);
+  } else {
+    found.when = EVENT_ONE.when;
+    found.pain = EVENT_ONE.pain;
+    found.notes = EVENT_ONE.notes;
     saveEvents(events);
   }
   return events;
@@ -110,14 +116,21 @@ function escapeHtml(s) {
   });
 }
 function render() {
-  const events = loadEvents().sort(function(a,b) { return new Date(b.when) - new Date(a.when); });
+  const events = loadEvents().sort(function(a,b) {
+    if (a.id === EVENT_ONE.id) return -1;
+    if (b.id === EVENT_ONE.id) return 1;
+    return new Date(b.when) - new Date(a.when);
+  });
   const box = $("ledger");
   if (!events.length) { box.innerHTML = '<p class="hint">No events yet.</p>'; return; }
   box.innerHTML = events.map(function(ev) {
+    const isOne = ev.id === EVENT_ONE.id;
     const tag = Number(ev.pain) >= 4 ? '<div class="signal">I know</div>' : '<div class="signal" style="color:var(--muted)">logged</div>';
     const notes = ev.notes ? ('<div class="notes">' + escapeHtml(ev.notes) + '</div>') : '';
     const closes = fmtWhen(new Date(new Date(ev.when).getTime() + 72*3600*1000).toISOString());
-    return '<article class="event"><div class="event-top"><div><div class="when">' + fmtWhen(ev.when) + '</div><div class="meta">Chester, SC · window closes ' + closes + '</div></div><div class="score">' + ev.pain + '<span style="font-size:14px;color:var(--muted)">/10</span>' + tag + '</div></div>' + notes + '<div class="weather">' + weatherBadge(ev) + '</div></article>';
+    const title = isOne ? 'Event 1 · Tina’s texts · 10:31 AM' : fmtWhen(ev.when);
+    const meta = isOne ? 'Chester, SC · clock started 10:31 AM · closes Sat 10:31 AM' : ('Chester, SC · window closes ' + closes);
+    return '<article class="event"><div class="event-top"><div><div class="when">' + title + '</div><div class="meta">' + meta + '</div></div><div class="score">' + ev.pain + '<span style="font-size:14px;color:var(--muted)">/10</span>' + tag + '</div></div>' + notes + '<div class="weather">' + weatherBadge(ev) + '</div></article>';
   }).join('');
 }
 async function refreshWeather() {
