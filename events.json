@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-26T16:14:00-04:00",
+  "updated": "2026-08-28T18:10:00-04:00",
   "events": [
     {
       "id": "event-1-2026-08-26",
@@ -7,7 +7,12 @@
       "pain": 4,
       "notes": "I know rain is coming. Back hurts and tired.",
       "source": "tina-texts",
-      "createdAt": "2026-08-26T11:33:00-04:00"
+      "createdAt": "2026-08-26T11:33:00-04:00",
+      "rained": true,
+      "firstRain": "2026-08-28T18:10:00-04:00",
+      "firstRainNote": "Tina confirmed raining at the house",
+      "hoursToRain": 55.65,
+      "windowClosed": false
     }
   ]
 }
