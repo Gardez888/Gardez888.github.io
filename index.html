@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 <body>
   <div class="wrap">
@@ -16,12 +16,23 @@
       <div class="kicker">Shared book · Chester, SC</div>
       <h1>Tina’s Back</h1>
       <p class="lede">When the pain crosses a threshold, rain has followed within 72 hours — with stunning precision. This log is how we prove it, event by event.</p>
-      <p class="lede" style="margin-top:12px;color:var(--gold)">Event 1 <strong>hit</strong> · signal Wed 10:31 AM · rain at the house Fri <strong>6:10 PM</strong> · about 56 hours.</p>
+      <p class="lede" style="margin-top:12px;color:var(--gold)">Event 2 is live · Sat Sep 19, <strong>12:39 PM</strong> · pain 4 · window closes Tue <strong>12:39 PM</strong>.</p>
     </header>
     <section class="card">
       <h2>The ledger</h2>
       <p class="hint">View only. New events are recorded in the Tina’s Back chat, then show here. Rain = measurable precipitation within 72 hours of a 4+ signal.</p>
       <div id="ledger">
+        <article class="event">
+          <div class="event-top">
+            <div>
+              <div class="when">Event 2 - 12:39 PM</div>
+              <div class="meta">Chester, SC - shared book - clock started Sat Sep 19 - closes Tue 12:39 PM</div>
+            </div>
+            <div class="score">4<span style="font-size:14px;color:var(--muted)">/10</span><div class="signal">I know</div></div>
+          </div>
+          <div class="notes">Rain is coming.</div>
+          <div class="weather"><span class="badge wait">watching</span><div class="meta">NWS: only a slight chance today. Better shot Monday night into Tuesday morning.</div></div>
+        </article>
         <article class="event">
           <div class="event-top">
             <div>
@@ -40,6 +51,5 @@
       <p style="margin-top:10px">When her back talks, we watch the sky.</p>
     </footer>
   </div>
-  <div class="toast" id="toast"></div>
 </body>
 </html>
