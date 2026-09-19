@@ -1,6 +1,16 @@
 {
-  "updated": "2026-08-28T18:10:00-04:00",
+  "updated": "2026-09-19T12:39:00-04:00",
   "events": [
+    {
+      "id": "event-2-2026-09-19",
+      "when": "2026-09-19T12:39:00-04:00",
+      "pain": 4,
+      "notes": "Rain is coming.",
+      "source": "chat",
+      "createdAt": "2026-09-19T12:39:00-04:00",
+      "rained": false,
+      "windowCloses": "2026-09-22T12:39:00-04:00"
+    },
     {
       "id": "event-1-2026-08-26",
       "when": "2026-08-26T10:31:00-04:00",
@@ -12,7 +22,7 @@
       "firstRain": "2026-08-28T18:10:00-04:00",
       "firstRainNote": "Tina confirmed raining at the house",
       "hoursToRain": 55.65,
-      "windowClosed": false
+      "windowCloses": "2026-08-29T10:31:00-04:00"
     }
   ]
 }
