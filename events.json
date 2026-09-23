@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-19T12:39:00-04:00",
+  "updated": "2026-09-22T21:09:00-04:00",
   "events": [
     {
       "id": "event-2-2026-09-19",
@@ -8,7 +8,10 @@
       "notes": "Rain is coming.",
       "source": "chat",
       "createdAt": "2026-09-19T12:39:00-04:00",
-      "rained": false,
+      "rained": true,
+      "firstRain": "2026-09-21T17:30:00-04:00",
+      "firstRainNote": "Rain in Chester, reported by James",
+      "hoursToRain": 52.85,
       "windowCloses": "2026-09-22T12:39:00-04:00"
     },
     {
